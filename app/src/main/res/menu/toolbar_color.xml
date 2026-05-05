@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Color"
+        android:title="COLOR" />
+    <item
+        android:id="@+id/Semua"
+        android:title="Semua" />
+    <item
+        android:id="@+id/Hitam"
+        android:title="Hitam" />
+    <item
+        android:id="@+id/Putih"
+        android:title="Putih" />
+    <item
+        android:id="@+id/Cream"
+        android:title="Cream" />
+    <item
+        android:id="@+id/Hijau"
+        android:title="Hijau" />
+    <item
+        android:id="@+id/Biru"
+        android:title="Biru" />
+</menu>

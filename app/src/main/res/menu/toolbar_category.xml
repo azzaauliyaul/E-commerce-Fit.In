@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/categoty"
+        android:title="CATEGORY" />
+    <item
+        android:id="@+id/semua"
+        android:title="semua"/>
+    <item
+        android:id="@+id/jaket"
+        android:title="Jaket"/>
+    <item
+        android:id="@+id/kemeja"
+        android:title="Kemeja" />
+    <item
+        android:id="@+id/knit"
+        android:title="Knit" />
+    <item
+        android:id="@+id/cardigan"
+        android:title="Cardigan" />
+    <item
+        android:id="@+id/dasi"
+        android:title="Dasi" />
+    <item
+        android:id="@+id/celana"
+        android:title="Celana" />
+</menu>

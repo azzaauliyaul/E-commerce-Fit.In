@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/white"
+    tools:context=".RegisterActivity">
+
+    <EditText
+        android:id="@+id/editTextTextEmailAddressRegis"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextUsername" />
+
+    <EditText
+        android:id="@+id/editTextAlamat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:inputType="text"
+        android:hint="alamat"
+        app:layout_constraintTop_toBottomOf="@id/editTextTextEmailAddressRegis"
+        app:layout_constraintStart_toStartOf="@id/editTextTextEmailAddressRegis"
+        app:layout_constraintEnd_toEndOf="@id/editTextTextEmailAddressRegis"/>
+
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:inputType="phone"
+        android:hint="Nomor Hp"
+        app:layout_constraintTop_toBottomOf="@id/editTextAlamat"
+        app:layout_constraintStart_toStartOf="@id/editTextAlamat"
+        app:layout_constraintEnd_toEndOf="@id/editTextAlamat"/>
+
+    <EditText
+        android:id="@+id/editTextTextPasswordRegis"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@id/editTextPhone"
+        app:layout_constraintStart_toStartOf="@id/editTextPhone"
+        app:layout_constraintTop_toBottomOf="@id/editTextPhone" />
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/black"
+        android:text="Register"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPasswordRegis"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPasswordRegis"
+        app:layout_constraintTop_toBottomOf="@id/editTextTextPasswordRegis" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Register"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextUsername"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create your account"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextUsername"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/editTextTextUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:ems="12"
+        android:hint="Username"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="162dp"
+        android:layout_height="104dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegister"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+</androidx.constraintlayout.widget.ConstraintLayout>

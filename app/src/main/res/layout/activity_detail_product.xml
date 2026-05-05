@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/white"
+    tools:context=".DetailProductActivity">
+
+    <ImageView
+        android:id="@+id/imageViewBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left" />
+
+    <ImageView
+        android:id="@+id/image_Detailproduct"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:contentDescription="imgProduct"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewBack" />
+
+    <TextView
+        android:id="@+id/textViewDetailName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_Detailproduct" />
+
+    <TextView
+        android:id="@+id/textViewDetailPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:padding="15dp"
+        android:text="10000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
+
+    <TextView
+        android:id="@+id/textViewDeskripsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewDetailName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDetailName" />
+
+    <TextView
+        android:id="@+id/textViewDetailCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="hello"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/textViewDeskripsi"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
+
+    <TextView
+        android:id="@+id/textViewDetailColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:text="hello"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/textViewDetailCategory"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
+
+    <Button
+        android:id="@+id/buttonBeli"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="Beli sekarang"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/textViewDetailPrice"
+        app:layout_constraintStart_toEndOf="@+id/addCart"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDetailCategory" />
+
+    <ImageView
+        android:id="@+id/addCart"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="15dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewDetailCategory"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDetailCategory"
+        app:srcCompat="@drawable/addcart" />
+</androidx.constraintlayout.widget.ConstraintLayout>
