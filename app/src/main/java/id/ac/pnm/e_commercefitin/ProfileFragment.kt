@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class ProfileFragment : Fragment() {
 
@@ -32,28 +34,33 @@ class ProfileFragment : Fragment() {
         val noTelp = view.findViewById<TextView>(R.id.textViewPhoneNumberProfile)
         val password = view.findViewById<TextView>(R.id.textViewPasswordProfile)
 
-        val akun = dataTitipan
+        val currentUsername = activity?.intent?.getStringExtra("currentUsername")
+        val database = Firebase.database
+        val users = database.getReference("users")
+        if (currentUsername != null) {
+            users.child(currentUsername).get().addOnSuccessListener { snapshot ->
+                if(snapshot.exists()) {
+                    val akun = snapshot.getValue(Akun::class.java)
 
-        fun viewProfile(akun: Akun){
-            imageViewProfile.setImageResource(R.drawable.profile)
-            username.text = "${akun.username}"
-            email.text = "${akun.email}"
-            alamat.text = "${akun.alamat}"
-            noTelp.text = "${akun.noTelp}"
-            password.text = "${akun.password}"
+                    akun?.let {
+                        username.text = it.username
+                        email.text = it.email
+                        alamat.text = it.alamat
+                        noTelp.text = it.noTelp
+                        password.text = it.password
+                    }
+                }
+            }.addOnFailureListener {
+                Toast.makeText(requireContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Gagal memuat, silahkan login kembali", Toast.LENGTH_SHORT).show()
         }
-        if (akun != null) {
-            viewProfile(akun)
-        } else{
-            Toast.makeText(requireContext(),"Data Kosong", Toast.LENGTH_SHORT).show()
-        }
+
         imageViewLogout.setOnClickListener {
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
-    }
-    companion object{
-        var dataTitipan: Akun? = null
     }
 }
