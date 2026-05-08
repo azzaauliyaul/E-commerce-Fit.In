@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,8 @@ class RegisterActivity : AppCompatActivity() {
         val editTextNoTelp = findViewById<EditText>(R.id.editTextPhone)
         val editTextPassword = findViewById<EditText>(R.id.editTextTextPasswordRegis)
         val btnRegister = findViewById<Button>(R.id.buttonRegister)
+        val database = Firebase.database
+        val users =  database.getReference("users")
 
         fun register(): Akun {
             return Akun(
@@ -38,7 +42,8 @@ class RegisterActivity : AppCompatActivity() {
 
         btnRegister.setOnClickListener {
             val akunBaru = register()
-            ProfileFragment.dataTitipan = akunBaru
+//            ProfileFragment.dataTitipan = akunBaru
+            users.push().setValue(akunBaru)
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }

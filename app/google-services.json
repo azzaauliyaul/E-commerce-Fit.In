@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "19340123332",
+    "firebase_url": "https://e-commercefitin-default-rtdb.firebaseio.com",
+    "project_id": "e-commercefitin",
+    "storage_bucket": "e-commercefitin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19340123332:android:a975ab658cff16c4247d91",
+        "android_client_info": {
+          "package_name": "id.ac.pnm.e_commercefitin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnXuUoG-M-Pu9tPSLlgPthW6-LWlTkiow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
