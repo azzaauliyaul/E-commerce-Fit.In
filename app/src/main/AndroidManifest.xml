@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerceFitIn">
         <activity
+            android:name=".DetailProductAdmin"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
@@ -29,7 +32,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
