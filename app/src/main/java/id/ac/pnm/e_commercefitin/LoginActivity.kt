@@ -27,41 +27,43 @@ class LoginActivity : AppCompatActivity() {
         val editTextPassword: EditText = findViewById<EditText>(R.id.editTextPassword)
         val buttonLogin = findViewById<Button>(R.id.buttonLogin)
         val register = findViewById<TextView>(R.id.textViewRegister)
-//        val akunLogin = ProfileFragment.dataTitipan
         val database = Firebase.database
-        val users =  database.getReference("users")
-        val usersFromDb = users.child("email")
+        val users = database.getReference("users")
 
         buttonLogin.setOnClickListener {
-            val email: String = editTextEmail.text.toString()
-            val password: String = editTextPassword.text.toString()
+            val email: String = editTextEmail.text.toString().trim()
+            val password: String = editTextPassword.text.toString().trim()
 
-            usersFromDb.get().addOnSuccessListener {
-                val passwordFromDb = it.child("password").toString()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Silahkan isi email dan password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else{
+                users.orderByChild("email").equalTo(email).get().addOnSuccessListener { snapshot ->
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val dbPassword = userSnapshot.child("password").value.toString()
 
-                if (password==passwordFromDb){
-                    val intentLoginToMain = Intent(this, MainActivity::class.java)
-                    intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intentLoginToMain)
-                } else{
-                    Toast.makeText(this, "password salah, silahkan coba lagi", Toast.LENGTH_SHORT).show()
+                            if (dbPassword == password) {
+                                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                                val currentUsername = userSnapshot.child("username").value.toString()
+                                val intentLoginToMain = Intent(this, MainActivity::class.java)
+                                intentLoginToMain.putExtra("currentUsername", currentUsername)
+                                intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intentLoginToMain)
+                            } else {
+                                Toast.makeText(
+                                    this, "Password Salah, silahkan coba lagi", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Email tidak terdaftar", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }.addOnFailureListener {
-                Toast.makeText(this, "email tidak ada", Toast.LENGTH_SHORT).show()
             }
-//
-//            if(email == akunLogin?.email && password == akunLogin.password){
-//                val intentLogin2Main = Intent(this, MainActivity::class.java)
-//                intentLogin2Main.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                startActivity(intentLogin2Main)
-//            } else {
-//                Toast.makeText(this, "Email atau password salah, silahkan coba lagi", Toast.LENGTH_SHORT).show()
-//            }
         }
         register.setOnClickListener {
             val intentToRegister = Intent(this, RegisterActivity::class.java)
             startActivity(intentToRegister)
         }
-
     }
 }

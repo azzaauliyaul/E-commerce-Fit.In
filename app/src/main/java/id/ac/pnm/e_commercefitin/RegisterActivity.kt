@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,20 +31,20 @@ class RegisterActivity : AppCompatActivity() {
         val database = Firebase.database
         val users =  database.getReference("users")
 
-        fun register(): Akun {
-            return Akun(
-                editTextUsername.text.toString(),
-                editTextEmail.text.toString(),
-                editTextAlamat.text.toString(),
-                editTextNoTelp.text.toString(),
-                editTextPassword.text.toString()
-            )
-        }
-
         btnRegister.setOnClickListener {
-            val akunBaru = register()
-//            ProfileFragment.dataTitipan = akunBaru
-            users.push().setValue(akunBaru)
+            val username = editTextUsername.text.toString().trim()
+            val email = editTextEmail.text.toString().trim()
+            val alamat = editTextAlamat.text.toString().trim()
+            val noTelp = editTextNoTelp.text.toString().trim()
+            val password = editTextPassword.text.toString().trim()
+
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Harap melengkapi semua data", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val akunBaru = Akun(username, email, alamat, noTelp, password)
+            users.child(akunBaru.username).setValue(akunBaru)
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
