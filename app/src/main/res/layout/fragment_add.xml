@@ -19,35 +19,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivPreview"
-        android:layout_width="150dp"
+    <LinearLayout
+        android:id="@+id/uploadCard"
+        android:layout_width="350dp"
         android:layout_height="150dp"
         android:layout_marginTop="40dp"
-        android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_menu_gallery"
+        android:background="@drawable/borderupload"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <ImageView
+            android:id="@+id/ivPreview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:padding="45dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:srcCompat="@drawable/upload" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/grey"
-        android:text="Pilih Gambar dari Galeri"
+        android:backgroundTint="#008BFF"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
+        android:text="upload image"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPreview" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadCard" />
 
 
     <EditText
         android:id="@+id/editTextPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="12"
+        android:ems="14"
         android:hint="Price"
         android:layout_marginTop="10dp"
         android:inputType="text"
@@ -60,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:ems="12"
+        android:ems="14"
         android:hint="Product Name"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:ems="12"
+        android:ems="14"
         android:hint="Category"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:ems="12"
+        android:ems="14"
         android:hint="Description"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,11 +107,13 @@
     <Button
         android:id="@+id/btnUpload"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/grey"
-        android:text="Pilih Gambar dari Galeri"
-        android:textColor="@color/black"
+        android:backgroundTint="@color/black"
+        android:text="Upload Product"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
         app:layout_constraintStart_toStartOf="@+id/editTextDescription"
         app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
