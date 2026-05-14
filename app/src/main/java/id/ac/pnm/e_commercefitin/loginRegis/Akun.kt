@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.loginRegis
 
 data class Akun(
     val username: String = "",

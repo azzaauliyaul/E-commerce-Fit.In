@@ -9,6 +9,10 @@
         android:id="@+id/cartFragment"
         android:icon="@drawable/cart"/>
     <item
+        android:title="Add"
+        android:id="@+id/AddFragment"
+        android:icon="@drawable/add"/>
+    <item
         android:title="Profile"
         android:id="@+id/profileFragment"
         android:icon="@drawable/account"/>

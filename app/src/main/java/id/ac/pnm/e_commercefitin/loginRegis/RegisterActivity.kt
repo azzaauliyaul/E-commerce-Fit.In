@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.loginRegis
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import id.ac.pnm.e_commercefitin.R
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

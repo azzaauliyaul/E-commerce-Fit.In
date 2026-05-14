@@ -12,7 +12,6 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
     RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>() {
     var filterData: MutableList<Catalog> = data.toMutableList()
     var selectedCategory: Category? = null
-    var selectedColor: Color? = null
     var searchQuery: String = ""
 
     override fun onCreateViewHolder(
@@ -27,10 +26,6 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
         selectedCategory = category
         filter()
     }
-    fun filterColor(color: Color?) {
-        selectedColor = color
-        filter()
-    }
 
     fun filterSearch(query: String) {
         searchQuery = query
@@ -41,11 +36,9 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
         filterData = data.filter { item ->
             val matchCategory =
                 selectedCategory?.let { item.Category == it } ?: true
-            val matchColor =
-                selectedColor?.let { item.Color == it } ?: true
             val matchSearch =
                 item.Name.contains(searchQuery, ignoreCase = true)
-            matchCategory&&matchColor&&matchSearch
+            matchCategory&&matchSearch
         }.toMutableList()
 
         notifyDataSetChanged()
@@ -62,7 +55,6 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
         holder.textViewName.text = catalog.Name
         holder.textViewDeskripsi.text = catalog.Deskripsi
         holder.textViewCategory.text = catalog.Category.toString()
-        holder.textViewColor.text = catalog.Color.toString()
         holder.row.setOnClickListener { onClickOpenDetailProductActivity(catalog) }
     }
     override fun getItemCount(): Int = filterData.size
@@ -73,7 +65,6 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
         val textViewName = row.findViewById<TextView>(R.id.textViewName)
         val textViewDeskripsi = row.findViewById<TextView>(R.id.textViewDeskripsi)
         val textViewCategory = row.findViewById<TextView>(R.id.textViewCategory)
-        val textViewColor = row.findViewById<TextView>(R.id.textViewColor)
 
     }
 }

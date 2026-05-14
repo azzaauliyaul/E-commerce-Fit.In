@@ -72,17 +72,6 @@
         app:layout_constraintStart_toStartOf="@+id/textViewDeskripsi"
         app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
 
-    <TextView
-        android:id="@+id/textViewDetailColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:text="hello"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toEndOf="@+id/textViewDetailCategory"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
-
     <Button
         android:id="@+id/buttonBeli"
         android:layout_width="0dp"
