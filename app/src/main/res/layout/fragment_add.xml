@@ -20,8 +20,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/uploadCard"
-        android:layout_width="350dp"
+        android:id="@+id/uploadImageCard"
+        android:layout_width="300dp"
         android:layout_height="150dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/borderupload"
@@ -35,7 +35,7 @@
             android:id="@+id/ivPreview"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:padding="45dp"
+            android:padding="40dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,17 +43,7 @@
             app:srcCompat="@drawable/upload" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#008BFF"
-        android:layout_marginTop="10dp"
-        android:text="upload image"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uploadCard" />
+
 
 
     <EditText
@@ -78,7 +68,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSelect" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadImageCard" />
 
     <EditText
         android:id="@+id/editTextCategory"

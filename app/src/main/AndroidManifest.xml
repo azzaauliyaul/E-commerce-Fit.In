@@ -15,13 +15,13 @@
             android:name=".DetailProductAdmin"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".loginRegis.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".DetailProductActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".loginRegis.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

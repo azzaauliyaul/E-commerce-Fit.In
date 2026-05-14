@@ -31,7 +31,6 @@ class DetailProductActivity : AppCompatActivity() {
         val textViewDetailHarga = findViewById<TextView>(R.id.textViewDetailPrice)
         val btnAddCart = findViewById<ImageView>(R.id.addCart)
         val textViewDetailkategori = findViewById<TextView>(R.id.textViewDetailCategory)
-        val textViewDetailColor = findViewById<TextView>(R.id.textViewDetailColor)
         val btnBeli = findViewById<Button>(R.id.buttonBeli)
 
         val img: Int = intent.getIntExtra("img", 0)
@@ -44,8 +43,6 @@ class DetailProductActivity : AppCompatActivity() {
         textViewDetailHarga.text = "Rp. $harga"
         val kategori: String = intent.getStringExtra("kategori").toString()?:""
         textViewDetailkategori.text = "$kategori"
-        val color: String = intent.getStringExtra("color").toString()?:""
-        textViewDetailColor.text = "$color"
 
         imageViewBack.setOnClickListener {
             val intent = Intent(

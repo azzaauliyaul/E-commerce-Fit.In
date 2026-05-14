@@ -26,13 +26,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:background="@drawable/search_bg"
         android:focusable="false"
         android:iconifiedByDefault="false"
         android:queryHint="Search here..."
-        app:layout_constraintEnd_toStartOf="@+id/filterColor"
+        app:layout_constraintEnd_toStartOf="@+id/filterCategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewUsernameProfile" />
 
@@ -41,20 +41,10 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="15dp"
-        app:layout_constraintTop_toTopOf="@+id/searchView"
         app:layout_constraintBottom_toBottomOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/filter" />
-
-    <ImageView
-        android:id="@+id/filterColor"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="35dp"
-        app:layout_constraintBottom_toBottomOf="@+id/searchView"
-        app:layout_constraintEnd_toEndOf="@id/filterCategory"
         app:layout_constraintTop_toTopOf="@+id/searchView"
-        app:srcCompat="@drawable/color" />
+        app:srcCompat="@drawable/filter" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCatalog"

@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
         if (currentUsername != null) {
             users.child(currentUsername).get().addOnSuccessListener { snapshot ->
                 if(snapshot.exists()) {
-                    val akun = snapshot.getValue(Akun::class.java)
+                    val akun = snapshot.getValue(id.ac.pnm.e_commercefitin.loginRegis.Akun::class.java)
 
                     akun?.let {
                         username.text = it.username
@@ -58,7 +58,7 @@ class ProfileFragment : Fragment() {
         }
 
         imageViewLogout.setOnClickListener {
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
+            val intent = Intent(requireActivity(), id.ac.pnm.e_commercefitin.loginRegis.LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

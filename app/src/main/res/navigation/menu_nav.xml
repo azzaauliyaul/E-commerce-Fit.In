@@ -20,4 +20,9 @@
         android:name="id.ac.pnm.e_commercefitin.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="id.ac.pnm.e_commercefitin.AddFragment"
+        android:label="fragment_add"
+        tools:layout="@layout/fragment_add" />
 </navigation>
