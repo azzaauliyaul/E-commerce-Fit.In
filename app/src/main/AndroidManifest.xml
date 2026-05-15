@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerceFitIn">
         <activity
+            android:name=".loginRegis.OnBoardingActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailProductAdmin"
             android:exported="false" />
         <activity
