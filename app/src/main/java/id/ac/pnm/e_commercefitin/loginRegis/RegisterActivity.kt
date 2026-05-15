@@ -10,10 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.database.database
 import id.ac.pnm.e_commercefitin.R
 
 class RegisterActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +35,7 @@ class RegisterActivity : AppCompatActivity() {
         val editTextPassword = findViewById<EditText>(R.id.editTextTextPasswordRegis)
         val btnRegister = findViewById<Button>(R.id.buttonRegister)
         val database = Firebase.database
+        auth = Firebase.auth
         val users =  database.getReference("users")
 
         btnRegister.setOnClickListener {
@@ -41,13 +47,24 @@ class RegisterActivity : AppCompatActivity() {
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Harap melengkapi semua data", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            } else{
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if(task.isSuccessful){
+                            val uId = auth.currentUser?.uid
+                            if(uId != null){
+                                val akunBaru = Akun(username, email, alamat, noTelp, password)
+                                users.child(uId).setValue(akunBaru)
+                                val intent = Intent(this, LoginActivity::class.java)
+                                startActivity(intent)
+                            } else{
+                                Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
-
-            val akunBaru = Akun(username, email, alamat, noTelp, password)
-            users.child(akunBaru.username).setValue(akunBaru)
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 }

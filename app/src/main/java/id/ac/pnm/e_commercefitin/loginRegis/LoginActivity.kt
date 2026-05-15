@@ -11,11 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.database.database
 import id.ac.pnm.e_commercefitin.MainActivity
 import id.ac.pnm.e_commercefitin.R
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
         val buttonLogin = findViewById<Button>(R.id.buttonLogin)
         val register = findViewById<TextView>(R.id.textViewRegister)
         val database = Firebase.database
+        auth = Firebase.auth
         val users = database.getReference("users")
 
         buttonLogin.setOnClickListener {
@@ -40,25 +46,13 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Silahkan isi email dan password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else{
-                users.orderByChild("email").equalTo(email).get().addOnSuccessListener { snapshot ->
-                    if (snapshot.exists()) {
-                        for (userSnapshot in snapshot.children) {
-                            val dbPassword = userSnapshot.child("password").value.toString()
-
-                            if (dbPassword == password) {
-                                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                                val currentUsername = userSnapshot.child("username").value.toString()
-                                val intentLoginToMain = Intent(this, MainActivity::class.java)
-                                intentLoginToMain.putExtra("currentUsername", currentUsername)
-                                intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intentLoginToMain)
-                            } else {
-                                Toast.makeText(
-                                    this, "Password Salah, silahkan coba lagi", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this, "Email tidak terdaftar", Toast.LENGTH_SHORT).show()
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+                    if(task.isSuccessful){
+                        val intentLoginToMain = Intent(this, MainActivity::class.java)
+                        intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intentLoginToMain)
+                    } else{
+                        Toast.makeText(this, "Login Gagal. Harap coba lagi.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
