@@ -10,9 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.database.database
+import id.ac.pnm.e_commercefitin.loginRegis.Akun
+import id.ac.pnm.e_commercefitin.loginRegis.LoginActivity
 
 class ProfileFragment : Fragment() {
+
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +40,15 @@ class ProfileFragment : Fragment() {
         val noTelp = view.findViewById<TextView>(R.id.textViewPhoneNumberProfile)
         val password = view.findViewById<TextView>(R.id.textViewPasswordProfile)
 
-        val currentUsername = activity?.intent?.getStringExtra("currentUsername")
         val database = Firebase.database
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
         val users = database.getReference("users")
-        if (currentUsername != null) {
-            users.child(currentUsername).get().addOnSuccessListener { snapshot ->
+        if (currentUser != null) {
+            val uId = currentUser.uid
+            users.child(uId).get().addOnSuccessListener { snapshot ->
                 if(snapshot.exists()) {
-                    val akun = snapshot.getValue(id.ac.pnm.e_commercefitin.loginRegis.Akun::class.java)
-
+                    val akun = snapshot.getValue(Akun::class.java)
                     akun?.let {
                         username.text = it.username
                         email.text = it.email
@@ -58,7 +65,8 @@ class ProfileFragment : Fragment() {
         }
 
         imageViewLogout.setOnClickListener {
-            val intent = Intent(requireActivity(), id.ac.pnm.e_commercefitin.loginRegis.LoginActivity::class.java)
+            auth.signOut()
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
