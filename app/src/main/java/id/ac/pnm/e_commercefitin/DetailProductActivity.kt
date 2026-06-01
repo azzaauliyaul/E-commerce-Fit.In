@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat.enableEdgeToEdge
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class DetailProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,17 +36,26 @@ class DetailProductActivity : AppCompatActivity() {
         val textViewDetailkategori = findViewById<TextView>(R.id.textViewDetailCategory)
         val btnBeli = findViewById<Button>(R.id.buttonBeli)
 
-        val img: Int = intent.getIntExtra("img", 0)
-        imageDetailProduct.setImageResource(img)
-        val judul: String = intent.getStringExtra("judul").toString()?:""
-        textViewDetailJudul.text = "$judul"
-        val deskripsi: String = intent.getStringExtra("deskripsi").toString()?:""
-        textViewDeskripsi.text = "$deskripsi"
-        val harga = intent.getIntExtra("harga", 0)
-        textViewDetailHarga.text = "Rp. $harga"
-        val kategori: String = intent.getStringExtra("kategori").toString()?:""
-        textViewDetailkategori.text = "$kategori"
+        val productId = intent.getStringExtra("productId")?:""
 
+        val database = Firebase.database
+        val product = database.getReference("product")
+        product.child(productId).get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()){
+                val detailProduct = snapshot.getValue(Catalog::class.java)
+                detailProduct?.let {
+                    textViewDetailJudul.text = it.name
+                    textViewDeskripsi.text = it.deskripsi
+                    textViewDetailHarga.text = "Rp. ${it.price ?: 0}"
+                    textViewDetailkategori.text = it.category
+                    Glide.with(this)
+                        .load(it.imageUrl)
+                        .placeholder(R.drawable.borderupload)
+                        .error(R.drawable.borderupload)
+                        .into(imageDetailProduct)
+                }
+            }
+        }
         imageViewBack.setOnClickListener {
             val intent = Intent(
                 this,
@@ -53,12 +65,12 @@ class DetailProductActivity : AppCompatActivity() {
         }
         btnBeli.setOnClickListener {
             val intentChat = Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://wa.me/6282334500709?text=Halo,%20saya%20beli%20product${judul}"))
+                Uri.parse("https://wa.me/6282334500709?text=Halo,%20saya%20beli%20product"))
             startActivity(intentChat)
         }
         btnAddCart.setOnClickListener {
-            val newCart = ItemCart(img, judul, harga, kategori)
-            CartFragment.dataCart.add(newCart)
+//            val newCart = ItemCart(img, judul, harga, kategori)
+//            CartFragment.dataCart.add(newCart)
             Toast.makeText(this, "Product ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
         }
     }
