@@ -10,9 +10,19 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 
 class HomeFragment : Fragment() {
+
+    private lateinit var adapter: CatalogAdapter
+    private val productList = mutableListOf<Catalog>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +35,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = CatalogAdapter(getCatalog(), ::openDetailProduct)
+        adapter = CatalogAdapter(productList, ::openDetailProduct)
         val textViewUsername = view.findViewById<TextView>(R.id.textViewUsernameProfile)
         textViewUsername.text = "Hey there"
         val searchView = view.findViewById<SearchView>(R.id.searchView)
@@ -33,27 +43,30 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         val filterCategory = view.findViewById<ImageView>(R.id.filterCategory)
 
-
+        getCatalog()
 
         filterCategory.setOnClickListener { anchor ->
             val popup = PopupMenu(requireContext(), anchor)
-            popup.menuInflater.inflate(R.menu.toolbar_category, popup.menu)
-            // event klik item
-        popup.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.semua -> adapter.filterCategory(null)
-                R.id.jaket -> adapter.filterCategory(Category.Jaket)
-                R.id.kemeja -> adapter.filterCategory(Category.Kemeja)
-                R.id.knit -> adapter.filterCategory(Category.Knit)
-                R.id.cardigan -> adapter.filterCategory(Category.Cardigan)
-                R.id.dasi -> adapter.filterCategory(Category.Dasi)
-                R.id.celana -> adapter.filterCategory(Category.Celana)
-                else -> false
+            val daftarKategoriUnik = productList
+                .map { it.category }
+                .filter { it.isNotEmpty() }
+                .distinct()
+                .sorted()
+            popup.menu.add(0, 0, 0, "Semua Produk")
+            daftarKategoriUnik.forEachIndexed { index, namaKategori ->
+                popup.menu.add(0, index + 1, index + 1, namaKategori)
             }
-            true
+            popup.setOnMenuItemClickListener { item ->
+                if (item.itemId == 0) {
+                    adapter.filterCategory(null)
+                } else {
+                    val selectedCategory = item.title.toString()
+                    adapter.filterCategory(selectedCategory)
+                }
+                true
+            }
+            popup.show()
         }
-        popup.show()
-    }
 
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -70,60 +83,47 @@ class HomeFragment : Fragment() {
 
 
     }
-    fun getCatalog(): List<Catalog> {
-        val data = mutableListOf<Catalog>()
-        data.add(Catalog(
-            R.drawable.celana,
-            "Cattwin Reworked pants",
-            250000,
-            "Celana baggy jeans dengan bahan yang ringan",
-            Category.Celana
-        ))
-        data.add(Catalog(
-            R.drawable.knit,
-            "Totoro day's",
-             200000,
-            "knitt dirajut dengan benang woll dan motif unik",
-            Category.Knit
-        ))
-        data.add(Catalog(
-            R.drawable.jaket,
-            "Memorable autumn in collage",
-            250000,
-            "jaket boxy terbuat dari bahan kulit tebal",
-            Category.Jaket
-        ))
-        data.add(Catalog(
-            R.drawable.kemeja,
-            "Fragmenta caeli",
-            200000,
-            "Kemeja berbahan fanell dengan motif yang unik",
-            Category.Kemeja
-        ))
-        data.add(Catalog(
-            R.drawable.dasi,
-            "Dasi Mix Collection",
-            50000,
-            "Dasi memiliki panjang 30cm dengan motif bunga",
-            Category.Dasi
-        ))
-        data.add(Catalog(
-            R.drawable.cardigan,
-            "Doctorium cardigan",
-            150000,
-            "cardigan terbuat dari bahan wol dengan ketebalan ..",
-            Category.Cardigan
-        ))
-        return data
-    }
+    fun getCatalog(){
+        val database = Firebase.database
+        val productFromDb = database.getReference("product")
+        productFromDb.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                productList.clear()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(Catalog::class.java)
+                    if (product != null) {
+                        productList.add(product)
+                    }
+                }
+                adapter.updateData(productList)
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(requireContext(), "Gagal: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
      fun openDetailProduct(catalog: Catalog) {
-        val intentMainToDetail = Intent(requireContext(), DetailProductActivity::class.java)
-        intentMainToDetail.putExtra("judul", catalog.Name)
-        intentMainToDetail.putExtra("img", catalog.Image)
-        intentMainToDetail.putExtra("harga", catalog.Price)
-        intentMainToDetail.putExtra("deskripsi", catalog.Deskripsi)
-        intentMainToDetail.putExtra("kategori", catalog.Category.name)
-        startActivity(intentMainToDetail)
+         val auth = Firebase.auth
+         val database = Firebase.database
+         val currentUSer = auth.currentUser
+         val users = database.getReference("users")
+         if (currentUSer != null) {
+             val uId = currentUSer.uid
+             users.child(uId).child("role").get().addOnSuccessListener { snapshot ->
+                 if(snapshot.exists()) {
+                     val role = snapshot.value?.toString() ?: "user"
+                     if (role == "admin") {
+                         val intentMainToDetail = Intent(requireContext(), DetailProductAdmin::class.java)
+                         intentMainToDetail.putExtra("productId", catalog.productID)
+                         startActivity(intentMainToDetail)
+                     } else {
+                         val intentMainToDetail = Intent(requireContext(), DetailProductActivity::class.java)
+                         intentMainToDetail.putExtra("productId", catalog.productID)
+                         startActivity(intentMainToDetail)
+                     }
+                 }
+             }
+         }
     }
 }

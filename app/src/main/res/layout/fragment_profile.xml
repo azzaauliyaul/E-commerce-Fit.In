@@ -48,7 +48,7 @@
         android:textSize="17sp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:text="Azza Auliyaul"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -70,7 +70,7 @@
         android:textSize="17sp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:text="xxxxxxx"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -92,7 +92,7 @@
         android:textSize="17sp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:text="089523344981"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -114,7 +114,7 @@
         android:textSize="17sp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:text="azzaauliyaul@gmail.com"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -136,7 +136,7 @@
         android:textSize="17sp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:text="Jl.fdfghfh RT12/Rw23, adfdggr"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 

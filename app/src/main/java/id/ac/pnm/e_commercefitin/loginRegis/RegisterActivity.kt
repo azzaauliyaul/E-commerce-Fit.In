@@ -53,7 +53,7 @@ class RegisterActivity : AppCompatActivity() {
                         if(task.isSuccessful){
                             val uId = auth.currentUser?.uid
                             if(uId != null){
-                                val akunBaru = Akun(username, email, alamat, noTelp, password)
+                                val akunBaru = Akun(username, email, alamat, noTelp, password, "user")
                                 users.child(uId).setValue(akunBaru)
                                 val intent = Intent(this, LoginActivity::class.java)
                                 startActivity(intent)
