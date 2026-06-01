@@ -73,18 +73,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDeskripsi" />
 
     <Button
-        android:id="@+id/buttonBeli"
+        android:id="@+id/buttonEditProduct"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:text="Edit"
         android:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/textViewDetailPrice"
-        app:layout_constraintStart_toEndOf="@+id/addCart"
+        app:layout_constraintStart_toEndOf="@+id/deleteProduct"
         app:layout_constraintTop_toBottomOf="@+id/textViewDetailCategory" />
 
     <ImageView
-        android:id="@+id/addCart"
+        android:id="@+id/deleteProduct"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"

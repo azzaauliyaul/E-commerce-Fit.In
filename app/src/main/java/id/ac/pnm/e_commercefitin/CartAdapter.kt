@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class CartAdapter(val data: MutableList<ItemCart>, val onCheckedChange: (Int) -> Unit): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
     override fun onCreateViewHolder(
@@ -25,17 +26,22 @@ class CartAdapter(val data: MutableList<ItemCart>, val onCheckedChange: (Int) ->
         position: Int
     ) {
         val dataCart = data[position]
-        holder.image.setImageResource(dataCart.Image)
-        holder.textViewName.text = dataCart.Name
-        holder.textViewPrice.text = "Rp. ${dataCart.Price}"
-        holder.textViewCategory.text = dataCart.Category
+        holder.textViewName.text = dataCart.name
+        holder.textViewPrice.text = "Rp. ${dataCart.price}"
+        holder.textViewCategory.text = dataCart.category
         holder.checkbox.isChecked = dataCart.isChecked
+
+        Glide.with(holder.itemView.context)
+            .load(dataCart.imageUrl)
+            .placeholder(R.drawable.borderupload)
+            .error(R.drawable.borderupload)
+            .into(holder.image)
 
         // Listener
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
             dataCart.isChecked = isChecked
 
-            val total = data.filter { it.isChecked }.sumOf { it.Price }
+            val total = data.filter { it.isChecked }.sumOf { it.price }
             onCheckedChange(total)
         }
 
@@ -45,7 +51,7 @@ class CartAdapter(val data: MutableList<ItemCart>, val onCheckedChange: (Int) ->
             notifyItemRemoved(cart)
             notifyItemRangeChanged(cart, data.size)
             Toast.makeText(holder.itemView.context, "Product dihapus dari keranjang", Toast.LENGTH_SHORT).show()
-            val total = data.filter { it.isChecked }.sumOf { it.Price }
+            val total = data.filter { it.isChecked }.sumOf { it.price }
             onCheckedChange(total)
         }
     }

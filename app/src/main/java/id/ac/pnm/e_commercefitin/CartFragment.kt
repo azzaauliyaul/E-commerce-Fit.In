@@ -40,8 +40,8 @@ class CartFragment : Fragment() {
                 Toast.makeText(requireContext(), "Checklist product terlebih dahulu", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                val listNama = checked.joinToString { it.Name }
-                val totalHarga = checked.sumOf { it.Price }
+                val listNama = checked.joinToString { it.name }
+                val totalHarga = checked.sumOf { it.price }
                 val intentChat = Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://wa.me/6282334500709?text=Halo, saya beli product $listNama, dengan total: Rp. $totalHarga"))
                 startActivity(intentChat)

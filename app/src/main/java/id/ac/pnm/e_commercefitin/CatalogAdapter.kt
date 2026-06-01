@@ -7,13 +7,18 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
-class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivity: (Catalog)-> Unit):
+class CatalogAdapter(var data: List<Catalog>, val onClickOpenDetailProductActivity: (Catalog)-> Unit):
     RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>() {
     var filterData: MutableList<Catalog> = data.toMutableList()
-    var selectedCategory: Category? = null
+    var selectedCategory: String? = null
     var searchQuery: String = ""
 
+    fun updateData(newData: List<Catalog>) {
+        this.data = newData
+        filter()
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -22,7 +27,7 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
             LayoutInflater.from(parent.context).inflate(R.layout.item_catalog, parent, false)
         return CatalogViewHolder(layout)
     }
-    fun filterCategory(category: Category?) {
+    fun filterCategory(category: String?) {
         selectedCategory = category
         filter()
     }
@@ -35,12 +40,11 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
     fun filter() {
         filterData = data.filter { item ->
             val matchCategory =
-                selectedCategory?.let { item.Category == it } ?: true
+                selectedCategory?.let { item.category == it } ?: true
             val matchSearch =
-                item.Name.contains(searchQuery, ignoreCase = true)
+                item.name.contains(searchQuery, ignoreCase = true)
             matchCategory&&matchSearch
         }.toMutableList()
-
         notifyDataSetChanged()
     }
 
@@ -50,14 +54,20 @@ class CatalogAdapter(val data: List<Catalog>, val onClickOpenDetailProductActivi
         position: Int
     ) {
         val catalog: Catalog = filterData[position]
-        holder.image.setImageResource(catalog.Image)
-        holder.textViewPrice.text = "Rp. ${catalog.Price}"
-        holder.textViewName.text = catalog.Name
-        holder.textViewDeskripsi.text = catalog.Deskripsi
-        holder.textViewCategory.text = catalog.Category.toString()
+        holder.textViewPrice.text = "Rp. ${catalog.price ?: 0}"
+        holder.textViewName.text = catalog.name
+        holder.textViewDeskripsi.text = catalog.deskripsi
+        holder.textViewCategory.text = catalog.category
+
+        Glide.with(holder.itemView.context)
+            .load(catalog.imageUrl)
+            .placeholder(R.drawable.borderupload)
+            .error(R.drawable.borderupload)
+            .into(holder.image)
         holder.row.setOnClickListener { onClickOpenDetailProductActivity(catalog) }
     }
     override fun getItemCount(): Int = filterData.size
+
     class CatalogViewHolder(val row: View) : RecyclerView.ViewHolder(row) {
         val searchView = row.findViewById<SearchView>(R.id.searchView)
         val image = row.findViewById<ImageView>(R.id.image_product)

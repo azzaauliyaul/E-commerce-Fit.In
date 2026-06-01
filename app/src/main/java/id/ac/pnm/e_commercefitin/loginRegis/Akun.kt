@@ -5,5 +5,6 @@ data class Akun(
     val email: String = "",
     val alamat: String = "",
     val noTelp: String = "",
-    val password: String = ""
+    val password: String = "",
+    val role: String = ""
 )

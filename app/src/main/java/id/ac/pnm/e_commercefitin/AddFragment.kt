@@ -1,34 +1,31 @@
 package id.ac.pnm.e_commercefitin
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
+import com.google.firebase.storage.storage
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import java.util.UUID
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var imageUri: Uri? = null
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri
+            Toast.makeText(requireContext(), "Gambar berhasil dipilih!", Toast.LENGTH_SHORT).show()
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,23 +34,69 @@ class AddFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val editTextName = view.findViewById<TextView>(R.id.editTextName)
+        val editTextPrice = view.findViewById<TextView>(R.id.editTextPrice)
+        val editTextCategory = view.findViewById<TextView>(R.id.editTextCategory)
+        val editTextDescription = view.findViewById<TextView>(R.id.editTextDescription)
+        val btnUploadImage = view.findViewById<LinearLayout>(R.id.uploadImageCard)
+        val btnUploadProduct = view.findViewById<Button>(R.id.btnUpload)
+        val database = Firebase.database
+        val productDb = database.getReference("product")
+        val storage = Firebase.storage
+        val product_images = storage.getReference("product_images")
+
+        btnUploadImage.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        btnUploadProduct.setOnClickListener {
+            val productName = editTextName.text.toString().trim()
+            val productPriceStr = editTextPrice.text.toString().trim()
+            val productCategory = editTextCategory.text.toString().trim()
+            val productDescription = editTextDescription.text.toString().trim()
+            if (productName.isEmpty() || productPriceStr.isEmpty() ||
+                productCategory.isEmpty() || productDescription.isEmpty()) {
+                Toast.makeText(requireContext(), "Harap mengisi semua kolom", Toast.LENGTH_SHORT).show()
             }
+            if (imageUri == null) {
+                Toast.makeText(requireContext(), "Silakan pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show()
+            }
+            val productPrice = productPriceStr.toIntOrNull()
+            btnUploadProduct.isEnabled = false
+            Toast.makeText(requireContext(), "Sedang menambahkan produk...", Toast.LENGTH_SHORT).show()
+            val uniqueImageName = "${UUID.randomUUID()}.jpg"
+            val fileRef = product_images.child(uniqueImageName)
+
+            fileRef.putFile(imageUri!!)
+                .addOnSuccessListener {
+                    fileRef.downloadUrl.addOnSuccessListener { uri ->
+                        val imageUrlString = uri.toString()
+                        val productId = productDb.push().key
+                        val product = Catalog(productId.toString(), productName, productPrice, productDescription, productCategory, imageUrlString)
+                        if (productId != null) {
+                            productDb.child(productId).setValue(product)
+                                .addOnSuccessListener {
+                                    Toast.makeText(requireContext(), "Produk berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                                    editTextName.text = ""
+                                    editTextPrice.text = ""
+                                    editTextCategory.text = ""
+                                    editTextDescription.text = ""
+                                    imageUri = null
+                                    btnUploadProduct.isEnabled = true
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(requireContext(), "Gagal menyimpan data ke database: ${e.message}", Toast.LENGTH_LONG).show()
+                                    btnUploadProduct.isEnabled = true
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Gagal mengunggah gambar: ${e.message}", Toast.LENGTH_LONG).show()
+                    btnUploadProduct.isEnabled = true
+                }
+        }
     }
 }

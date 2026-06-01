@@ -1,11 +1,9 @@
 package id.ac.pnm.e_commercefitin
 data class Catalog(
-    val Image: Int,
-    val Name: String,
-    val Price: Int,
-    val Deskripsi: String,
-    val Category: Category
+    val productID: String = "",
+    val name: String = "",
+    val price: Int? = null,
+    val deskripsi: String = "",
+    val category: String = "",
+    val imageUrl: String = ""
 )
-enum class Category{
-    Jaket, Knit, Dasi, Kemeja, Celana, Cardigan
-}

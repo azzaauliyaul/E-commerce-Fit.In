@@ -1,9 +1,9 @@
 package id.ac.pnm.e_commercefitin
 
 data class ItemCart(
-    val Image: Int,
-    val Name: String,
-    val Price: Int,
-    val Category: String,
+    val imageUrl: String,
+    val name: String,
+    val price: Int,
+    val category: String,
     var isChecked: Boolean = false
 )
