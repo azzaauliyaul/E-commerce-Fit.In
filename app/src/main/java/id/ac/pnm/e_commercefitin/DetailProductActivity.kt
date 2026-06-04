@@ -13,9 +13,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat.enableEdgeToEdge
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import id.ac.pnm.e_commercefitin.roomData.AppDatabase
+import id.ac.pnm.e_commercefitin.roomData.CartEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +46,11 @@ class DetailProductActivity : AppCompatActivity() {
 
         val database = Firebase.database
         val product = database.getReference("product")
+        var currentProduct: Catalog? = null
         product.child(productId).get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()){
                 val detailProduct = snapshot.getValue(Catalog::class.java)
+                currentProduct = detailProduct
                 detailProduct?.let {
                     textViewDetailJudul.text = it.name
                     textViewDeskripsi.text = it.deskripsi
@@ -71,7 +79,34 @@ class DetailProductActivity : AppCompatActivity() {
         btnAddCart.setOnClickListener {
 //            val newCart = ItemCart(img, judul, harga, kategori)
 //            CartFragment.dataCart.add(newCart)
-            Toast.makeText(this, "Product ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
+            currentProduct?.let { product ->
+
+                lifecycleScope.launch(Dispatchers.IO) {
+
+                    val cartEntity = CartEntity(
+                        productID = productId,
+                        name = product.name ?: "",
+                        price = product.price ?: 0,
+                        category = product.category ?: "",
+                        imageUrl = product.imageUrl ?: "",
+                        isChecked = false
+                    )
+
+                    AppDatabase
+                        .getDatabase(this@DetailProductActivity)
+                        .cartDao()
+                        .insertCart(cartEntity)
+
+                    withContext(Dispatchers.Main) {
+
+                        Toast.makeText(
+                            this@DetailProductActivity,
+                            "Product ditambahkan ke keranjang",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     }
 }
