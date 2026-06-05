@@ -9,8 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import id.ac.pnm.e_commercefitin.roomData.AppDatabase
+import id.ac.pnm.e_commercefitin.roomData.CartEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CartAdapter(val data: MutableList<ItemCart>, val onCheckedChange: (Int) -> Unit): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
+class CartAdapter(val data: MutableList<CartEntity>, val onCheckedChange: (Int) -> Unit): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -41,23 +46,44 @@ class CartAdapter(val data: MutableList<ItemCart>, val onCheckedChange: (Int) ->
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
             dataCart.isChecked = isChecked
 
-            val total = data.filter { it.isChecked }.sumOf { it.price }
+            CoroutineScope(Dispatchers.IO).launch {
+                AppDatabase
+                    .getDatabase(holder.itemView.context)
+                    .cartDao()
+                    .updateCart(dataCart)
+            }
+
+            val total = data.filter { it.isChecked }.sumOf { it.price ?: 0 }
             onCheckedChange(total)
         }
 
         holder.btnDelete.setOnClickListener {
-            val cart = holder.bindingAdapterPosition
-            data.remove(dataCart)
-            notifyItemRemoved(cart)
-            notifyItemRangeChanged(cart, data.size)
-            Toast.makeText(holder.itemView.context, "Product dihapus dari keranjang", Toast.LENGTH_SHORT).show()
-            val total = data.filter { it.isChecked }.sumOf { it.price }
-            onCheckedChange(total)
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+                AppDatabase
+                    .getDatabase(holder.itemView.context)
+                    .cartDao()
+                    .deleteCart(dataCart)
+
+            }
+
+            Toast.makeText(
+                holder.itemView.context,
+                "Product dihapus dari keranjang",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    fun updateData(newData: List<CartEntity>) {
+        data.clear()
+        data.addAll(newData)
+        notifyDataSetChanged()
     }
 
     class CartViewHolder(val row: View) : RecyclerView.ViewHolder(row){

@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import id.ac.pnm.e_commercefitin.roomData.AppDatabase
 import kotlin.collections.filter
 
 class CartFragment : Fragment() {
@@ -25,36 +26,85 @@ class CartFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCart)
-        val textCount = view.findViewById<TextView>(R.id.textViewCount)
-        val btnPesan = view.findViewById<Button>(R.id.buttonPesan)
+
+        val recyclerView =
+            view.findViewById<RecyclerView>(R.id.recyclerViewCart)
+
+        val textCount =
+            view.findViewById<TextView>(R.id.textViewCount)
+
+        val btnPesan =
+            view.findViewById<Button>(R.id.buttonPesan)
+
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        val adapter =
+            CartAdapter(mutableListOf()) { total ->
+                textCount.text = "Rp. $total"
+            }
+
+        recyclerView.adapter = adapter
+
+        AppDatabase
+            .getDatabase(requireContext())
+            .cartDao()
+            .getAllCart()
+            .observe(viewLifecycleOwner) { cartList ->
+
+                adapter.updateData(cartList)
+
+                val total = cartList
+                    .filter { it.isChecked }
+                    .sumOf { it.price ?: 0 }
+
+                textCount.text = "Rp. $total"
+            }
 
         btnPesan.setOnClickListener {
-            if (dataCart.isEmpty()) {
-                Toast.makeText(requireContext(), "Tidak ada product di cart", Toast.LENGTH_SHORT).show()
+
+            val currentData =
+                adapter.data
+
+            if (currentData.isEmpty()) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Tidak ada product di cart",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 return@setOnClickListener
             }
 
-            val checked = dataCart.filter { it.isChecked }
+            val checked =
+                currentData.filter { it.isChecked }
+
             if (checked.isEmpty()) {
-                Toast.makeText(requireContext(), "Checklist product terlebih dahulu", Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(
+                    requireContext(),
+                    "Checklist product terlebih dahulu",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 return@setOnClickListener
-            } else {
-                val listNama = checked.joinToString { it.name }
-                val totalHarga = checked.sumOf { it.price }
-                val intentChat = Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://wa.me/6282334500709?text=Halo, saya beli product $listNama, dengan total: Rp. $totalHarga"))
-                startActivity(intentChat)
             }
 
+            val listNama =
+                checked.joinToString { it.name }
 
+            val totalHarga =
+                checked.sumOf { it.price ?: 0 }
+
+            val intentChat = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(
+                    "https://wa.me/6282334500709?text=Halo, saya beli product $listNama, dengan total: Rp. $totalHarga"
+                )
+            )
+
+            startActivity(intentChat)
         }
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = CartAdapter(dataCart) { total ->
-            textCount.text = "Rp. $total"
-        }
-    }
-    companion object{
-        var dataCart: MutableList<ItemCart> = mutableListOf()
     }
 }

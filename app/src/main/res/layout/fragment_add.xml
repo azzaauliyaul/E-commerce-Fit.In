@@ -44,54 +44,52 @@
     </LinearLayout>
 
 
-
-
     <EditText
         android:id="@+id/editTextPrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ems="14"
         android:hint="Price"
-        android:layout_marginTop="10dp"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextName"
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
     <EditText
         android:id="@+id/editTextName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:ems="14"
         android:hint="Product Name"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/uploadImageCard"
+        app:layout_constraintStart_toStartOf="@+id/uploadImageCard"
         app:layout_constraintTop_toBottomOf="@+id/uploadImageCard" />
 
     <EditText
         android:id="@+id/editTextCategory"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="14"
         android:hint="Category"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPrice"
+        app:layout_constraintStart_toStartOf="@+id/editTextPrice"
         app:layout_constraintTop_toBottomOf="@+id/editTextPrice" />
 
     <EditText
         android:id="@+id/editTextDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="14"
         android:hint="Description"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCategory"
+        app:layout_constraintStart_toStartOf="@+id/editTextCategory"
         app:layout_constraintTop_toBottomOf="@+id/editTextCategory" />
 
     <Button
@@ -103,7 +101,6 @@
         android:text="Upload Product"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
         app:layout_constraintStart_toStartOf="@+id/editTextDescription"
         app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
