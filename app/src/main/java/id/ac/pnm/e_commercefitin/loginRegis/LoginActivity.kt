@@ -21,6 +21,19 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    override fun onStart() {
+        super.onStart()
+        auth = Firebase.auth
+
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val intentLoginToMain = Intent(this, MainActivity::class.java)
+            intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intentLoginToMain)
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,9 +47,7 @@ class LoginActivity : AppCompatActivity() {
         val editTextPassword: EditText = findViewById<EditText>(R.id.editTextPassword)
         val buttonLogin = findViewById<Button>(R.id.buttonLogin)
         val register = findViewById<TextView>(R.id.textViewRegister)
-        val database = Firebase.database
         auth = Firebase.auth
-        val users = database.getReference("users")
 
         buttonLogin.setOnClickListener {
             val email: String = editTextEmail.text.toString().trim()

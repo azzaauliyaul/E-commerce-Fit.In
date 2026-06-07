@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import com.google.firebase.storage.storage
 
 class DetailProductAdmin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,9 +36,10 @@ class DetailProductAdmin : AppCompatActivity() {
         val btnDelete = findViewById<ImageView>(R.id.deleteProduct)
 
         val productId = intent.getStringExtra("productId")?:""
-
+        var currentImageUrl = ""
         val database = Firebase.database
         val product = database.getReference("product")
+
         product.child(productId).get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()){
                 val detailProduct = snapshot.getValue(Catalog::class.java)
@@ -46,6 +48,7 @@ class DetailProductAdmin : AppCompatActivity() {
                     textViewDeskripsi.text = it.deskripsi
                     textViewDetailHarga.text = "Rp. ${it.price ?: 0}"
                     textViewDetailkategori.text = it.category
+                    currentImageUrl = it.imageUrl
                     Glide.with(this)
                         .load(it.imageUrl)
                         .placeholder(R.drawable.borderupload)
@@ -62,12 +65,25 @@ class DetailProductAdmin : AppCompatActivity() {
             startActivity(intent)
         }
         btnEdit.setOnClickListener {
-            val intentChat = Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://wa.me/6282334500709?text=Halo,%20saya%20beli%20product"))
-            startActivity(intentChat)
+            val intentToEdit = Intent(this, UpdateProductActivity::class.java)
+            intentToEdit.putExtra("product_id", productId)
+            startActivity(intentToEdit)
         }
         btnDelete.setOnClickListener {
-            Toast.makeText(this, "Product ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
+            val storage = Firebase.storage
+            if (currentImageUrl.isNotEmpty()){
+                val product_images = storage.getReferenceFromUrl(currentImageUrl)
+                product_images.delete().addOnSuccessListener {
+                    product.child(productId).removeValue().addOnSuccessListener {
+                        Toast.makeText(this, "Produk berhasil dihapus!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Gagal menghapus data", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Gagal menghapus gambar", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }

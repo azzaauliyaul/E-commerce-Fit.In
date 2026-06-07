@@ -42,8 +42,6 @@ dependencies {
     val room_version = "2.7.0"
     implementation("androidx.room:room-runtime:$room_version")
 
-    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
-    // See Add the KSP plugin to your project
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
