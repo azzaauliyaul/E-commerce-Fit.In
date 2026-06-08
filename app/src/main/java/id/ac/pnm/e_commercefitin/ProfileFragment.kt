@@ -33,6 +33,8 @@ class ProfileFragment : Fragment() {
         
         val imageViewLogout = view.findViewById<ImageView>(R.id.imageViewLogout)
         val imageViewProfile = view.findViewById<ImageView>(R.id.imageView)
+        imageViewProfile.setImageResource(R.drawable.account)
+
         val Logout = view.findViewById<TextView>(R.id.Logout)
         val username = view.findViewById<TextView>(R.id.textViewUsernameProfile)
         val email = view.findViewById<TextView>(R.id.textViewEmailProfile)
