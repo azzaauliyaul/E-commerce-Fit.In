@@ -1,6 +1,11 @@
 package id.ac.pnm.e_commercefitin
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,7 +27,28 @@ import com.google.firebase.database.database
 class HomeFragment : Fragment() {
 
     private lateinit var adapter: CatalogAdapter
+    private lateinit var internetStatus: TextView
+    private lateinit var connectivityManager: ConnectivityManager
     private val productList = mutableListOf<Catalog>()
+    private val networkCallback =
+        object : ConnectivityManager.NetworkCallback() {
+
+            override fun onAvailable(network: android.net.Network) {
+
+                activity?.runOnUiThread {
+
+                    internetStatus.visibility = View.GONE
+                }
+            }
+
+            override fun onLost(network: android.net.Network) {
+
+                activity?.runOnUiThread {
+
+                    internetStatus.visibility = View.VISIBLE
+                }
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +60,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        internetStatus =
+            view.findViewById(R.id.textInternetStatus)
+
+        connectivityManager =
+            requireContext().getSystemService(
+                ConnectivityManager::class.java
+            )
 
         adapter = CatalogAdapter(productList, ::openDetailProduct)
         val textViewUsername = view.findViewById<TextView>(R.id.textViewUsernameProfile)
@@ -83,6 +117,28 @@ class HomeFragment : Fragment() {
 
 
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        connectivityManager.registerDefaultNetworkCallback(
+            networkCallback
+        )
+
+        internetStatus.visibility =
+            if (isInternetAvailable())
+                View.GONE
+            else
+                View.VISIBLE
+    }
+    override fun onPause() {
+        super.onPause()
+
+        connectivityManager.unregisterNetworkCallback(
+            networkCallback
+        )
+    }
+
     fun getCatalog(){
         val database = Firebase.database
         val productFromDb = database.getReference("product")
@@ -125,5 +181,24 @@ class HomeFragment : Fragment() {
                  }
              }
          }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+
+        val connectivityManager =
+            requireContext().getSystemService(
+                ConnectivityManager::class.java
+            )
+
+        val network =
+            connectivityManager.activeNetwork ?: return false
+
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(network)
+                ?: return false
+
+        return capabilities.hasCapability(
+            NetworkCapabilities.NET_CAPABILITY_INTERNET
+        )
     }
 }

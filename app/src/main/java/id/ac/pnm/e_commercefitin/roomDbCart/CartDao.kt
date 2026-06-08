@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin.roomData
+package id.ac.pnm.e_commercefitin.roomDbCart
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -9,8 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import id.ac.pnm.e_commercefitin.roomData.AppDatabase
-import id.ac.pnm.e_commercefitin.roomData.CartEntity
+import id.ac.pnm.e_commercefitin.roomDbCart.AppDatabase
+import id.ac.pnm.e_commercefitin.roomDbCart.CartEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

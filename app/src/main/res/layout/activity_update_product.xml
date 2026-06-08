@@ -44,7 +44,7 @@
             android:id="@+id/ivPreview"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:padding="40dp"
+            android:padding="5dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -12,7 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import id.ac.pnm.e_commercefitin.roomData.AppDatabase
+import id.ac.pnm.e_commercefitin.roomDbCart.AppDatabase
 import kotlin.collections.filter
 
 class CartFragment : Fragment() {
