@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,6 +16,10 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
 import id.ac.pnm.e_commercefitin.loginRegis.Akun
+import id.ac.pnm.e_commercefitin.loginRegis.UserDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,18 +40,24 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
         val navController = findNavController(R.id.navHost)
         val menu = bottomNavigationView.menu
-        if (currentUser != null) {
-            val uId = currentUser.uid
-            users.child(uId).child("role").get().addOnSuccessListener { snapshot ->
-                if(snapshot.exists()) {
-                    val role = snapshot.value?.toString() ?: "user"
-                    if (role == "admin") {
-                        menu.removeItem(R.id.cartFragment)
-                    } else {
-                        menu.removeItem(R.id.addFragment)
-                    }
-                    bottomNavigationView.setupWithNavController(navController)
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            val user = UserDatabase
+                    .getDatabase(this@MainActivity)
+                    .userDao()
+                    .getUser()
+
+            withContext(Dispatchers.Main) {
+
+                val role = user?.role ?: "user"
+
+                if (role == "admin") {
+                    menu.removeItem(R.id.cartFragment)
+                } else {
+                    menu.removeItem(R.id.addFragment)
                 }
+
+                bottomNavigationView.setupWithNavController(navController)
             }
         }
     }
