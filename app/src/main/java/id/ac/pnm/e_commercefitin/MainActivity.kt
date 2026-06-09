@@ -49,12 +49,12 @@ class MainActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
 
-                val role = user?.role ?: "user"
+                val role = user?.role
 
                 if (role == "admin") {
-                    menu.removeItem(R.id.addFragment)
-                } else {
                     menu.removeItem(R.id.cartFragment)
+                } else {
+                    menu.removeItem(R.id.addFragment)
                 }
 
                 bottomNavigationView.setupWithNavController(navController)

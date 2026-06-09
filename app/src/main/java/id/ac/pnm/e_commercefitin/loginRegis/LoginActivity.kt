@@ -27,14 +27,16 @@
 
         override fun onStart() {
             super.onStart()
-            auth = Firebase.auth
-
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                val intentLoginToMain = Intent(this, MainActivity::class.java)
-                intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intentLoginToMain)
-                finish()
+            lifecycleScope.launch(Dispatchers.IO) {
+                val user = UserDatabase.getDatabase(this@LoginActivity).userDao().getUser()
+                if (user != null) {
+                    withContext(Dispatchers.Main) {
+                        val intentLoginToMain = Intent(this@LoginActivity, MainActivity::class.java)
+                        intentLoginToMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intentLoginToMain)
+                        finish()
+                    }
+                }
             }
         }
 

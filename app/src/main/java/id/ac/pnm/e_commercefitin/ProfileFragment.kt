@@ -9,16 +9,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.database.database
 import id.ac.pnm.e_commercefitin.loginRegis.Akun
 import id.ac.pnm.e_commercefitin.loginRegis.LoginActivity
+import id.ac.pnm.e_commercefitin.loginRegis.UserDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileFragment : Fragment() {
-
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,35 +46,39 @@ class ProfileFragment : Fragment() {
         val noTelp = view.findViewById<TextView>(R.id.textViewPhoneNumberProfile)
         val password = view.findViewById<TextView>(R.id.textViewPasswordProfile)
 
-        val database = Firebase.database
-        auth = Firebase.auth
-        val currentUser = auth.currentUser
-        val users = database.getReference("users")
-        if (currentUser != null) {
-            val uId = currentUser.uid
-            users.child(uId).get().addOnSuccessListener { snapshot ->
-                if(snapshot.exists()) {
-                    val akun = snapshot.getValue(Akun::class.java)
-                    akun?.let {
-                        username.text = it.username
-                        email.text = it.email
-                        alamat.text = it.alamat
-                        noTelp.text = it.noTelp
-                        password.text = it.password
-                    }
-                }
-            }.addOnFailureListener {
-                Toast.makeText(requireContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(requireContext(), "Gagal memuat, silahkan login kembali", Toast.LENGTH_SHORT).show()
-        }
+        lifecycleScope.launch(Dispatchers.IO) {
 
+            val user = UserDatabase
+                .getDatabase(requireContext())
+                .userDao()
+                .getUser()
+
+            withContext(Dispatchers.Main) {
+                if (user != null){
+                    username.text = user.username
+                    email.text = user.email
+                    alamat.text = user.alamat
+                    noTelp.text = user.noTelp
+                    password.text = user.password
+                } else{
+                    Toast.makeText(requireContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         imageViewLogout.setOnClickListener {
-            auth.signOut()
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            lifecycleScope.launch(Dispatchers.IO) {
+
+                UserDatabase.getDatabase(requireContext())
+                    .userDao()
+                    .deleteUser()
+
+                withContext(Dispatchers.Main) {
+                    val intent = Intent(requireActivity(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+            }
         }
     }
 }
