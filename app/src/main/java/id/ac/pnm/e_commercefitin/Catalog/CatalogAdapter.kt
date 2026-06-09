@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.Catalog
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import id.ac.pnm.e_commercefitin.R
 
 class CatalogAdapter(var data: List<Catalog>, val onClickOpenDetailProductActivity: (Catalog)-> Unit):
     RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder>() {

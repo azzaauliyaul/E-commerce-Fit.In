@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.Catalog
 data class Catalog(
     val productID: String = "",
     val name: String = "",

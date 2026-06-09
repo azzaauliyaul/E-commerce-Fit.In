@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.DetailProduct
 
 import android.content.Intent
 import android.net.Uri
@@ -15,8 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
-import id.ac.pnm.e_commercefitin.roomDbCart.AppDatabase
-import id.ac.pnm.e_commercefitin.roomDbCart.CartEntity
+import id.ac.pnm.e_commercefitin.Cart.AppDatabase
+import id.ac.pnm.e_commercefitin.Cart.CartEntity
+import id.ac.pnm.e_commercefitin.Catalog.Catalog
+import id.ac.pnm.e_commercefitin.MainActivity
+import id.ac.pnm.e_commercefitin.R
+import id.ac.pnm.e_commercefitin.loginRegis.UserDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -81,7 +85,13 @@ class DetailProductActivity : AppCompatActivity() {
 
                 lifecycleScope.launch(Dispatchers.IO) {
 
+                    val user = UserDatabase
+                        .getDatabase(this@DetailProductActivity)
+                        .userDao()
+                        .getUser()
+
                     val cartEntity = CartEntity(
+                        uid = user?.uid ?: "",
                         productID = productId,
                         name = product.name ?: "",
                         price = product.price ?: 0,

@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin.roomDbCart
+package id.ac.pnm.e_commercefitin.Cart
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -19,12 +19,12 @@ interface CartDao {
     @Delete
     suspend fun deleteCart(item: CartEntity)
 
-    @Query("SELECT * FROM cart")
-    fun getAllCart(): LiveData<List<CartEntity>>
+    @Query("SELECT * FROM cart WHERE uid = :uid")
+    fun getAllCart(uid: String): LiveData<List<CartEntity>>
 
-    @Query("SELECT * FROM cart WHERE productID = :id")
-    suspend fun getCartById(id: String): CartEntity?
+    @Query("SELECT * FROM cart WHERE productID = :productId AND uid = :uid")
+    suspend fun getCartById(productId: String, uid: String): CartEntity?
 
-    @Query("DELETE FROM cart")
-    suspend fun clearCart()
+    @Query("DELETE FROM cart WHERE uid = :uid")
+    suspend fun clearCart(uid: String)
 }

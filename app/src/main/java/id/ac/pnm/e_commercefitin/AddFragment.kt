@@ -16,6 +16,7 @@ import com.google.firebase.storage.storage
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import id.ac.pnm.e_commercefitin.Catalog.Catalog
 import java.util.UUID
 
 class AddFragment : Fragment() {
@@ -84,7 +85,14 @@ class AddFragment : Fragment() {
                     fileRef.downloadUrl.addOnSuccessListener { uri ->
                         val imageUrlString = uri.toString()
                         val productId = productDb.push().key
-                        val product = Catalog(productId.toString(), productName, productPrice, productDescription, productCategory, imageUrlString)
+                        val product = Catalog(
+                            productId.toString(),
+                            productName,
+                            productPrice,
+                            productDescription,
+                            productCategory,
+                            imageUrlString
+                        )
                         if (productId != null) {
                             productDb.child(productId).setValue(product)
                                 .addOnSuccessListener {

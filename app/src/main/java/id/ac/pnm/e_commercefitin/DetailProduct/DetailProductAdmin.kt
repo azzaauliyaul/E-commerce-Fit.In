@@ -1,7 +1,6 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.DetailProduct
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -15,6 +14,10 @@ import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import com.google.firebase.storage.storage
+import id.ac.pnm.e_commercefitin.Catalog.Catalog
+import id.ac.pnm.e_commercefitin.MainActivity
+import id.ac.pnm.e_commercefitin.R
+import id.ac.pnm.e_commercefitin.Update.UpdateProductActivity
 
 class DetailProductAdmin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

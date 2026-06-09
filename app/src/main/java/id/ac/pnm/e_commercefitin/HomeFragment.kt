@@ -1,11 +1,8 @@
 package id.ac.pnm.e_commercefitin
 
-import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +20,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import id.ac.pnm.e_commercefitin.Catalog.Catalog
+import id.ac.pnm.e_commercefitin.Catalog.CatalogAdapter
+import id.ac.pnm.e_commercefitin.DetailProduct.DetailProductActivity
+import id.ac.pnm.e_commercefitin.DetailProduct.DetailProductAdmin
 
 class HomeFragment : Fragment() {
 

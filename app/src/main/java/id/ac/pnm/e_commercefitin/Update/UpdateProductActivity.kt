@@ -1,11 +1,10 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.Update
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import id.ac.pnm.e_commercefitin.Catalog.Catalog
+import id.ac.pnm.e_commercefitin.MainActivity
+import id.ac.pnm.e_commercefitin.R
 
 class UpdateProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

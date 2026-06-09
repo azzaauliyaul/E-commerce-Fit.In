@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="@color/white"
-    tools:context=".DetailProductAdmin">
+    tools:context=".DetailProduct.DetailProductAdmin">
 
     <ImageView
         android:id="@+id/imageViewBack"

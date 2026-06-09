@@ -1,4 +1,4 @@
-package id.ac.pnm.e_commercefitin
+package id.ac.pnm.e_commercefitin.Cart
 
 data class ItemCart(
     val imageUrl: String,

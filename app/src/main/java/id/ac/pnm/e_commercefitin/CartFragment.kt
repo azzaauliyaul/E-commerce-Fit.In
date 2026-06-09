@@ -3,17 +3,21 @@ package id.ac.pnm.e_commercefitin
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import id.ac.pnm.e_commercefitin.roomDbCart.AppDatabase
-import kotlin.collections.filter
+import id.ac.pnm.e_commercefitin.Cart.CartAdapter
+import id.ac.pnm.e_commercefitin.Cart.AppDatabase
+import id.ac.pnm.e_commercefitin.loginRegis.UserDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CartFragment : Fragment() {
 
@@ -46,21 +50,33 @@ class CartFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
-        AppDatabase
-            .getDatabase(requireContext())
-            .cartDao()
-            .getAllCart()
-            .observe(viewLifecycleOwner) { cartList ->
+        lifecycleScope.launch(Dispatchers.IO) {
 
-                adapter.updateData(cartList)
+            val user = UserDatabase
+                .getDatabase(requireContext())
+                .userDao()
+                .getUser()
 
-                val total = cartList
-                    .filter { it.isChecked }
-                    .sumOf { it.price ?: 0 }
 
-                textCount.text = "Rp. $total"
+            if (user == null) return@launch
+
+            launch(Dispatchers.Main) {
+            AppDatabase
+                .getDatabase(requireContext())
+                .cartDao()
+                .getAllCart(user.uid)
+                .observe(viewLifecycleOwner) { cartList ->
+
+                    adapter.updateData(cartList)
+
+                    val total = cartList
+                        .filter { it.isChecked }
+                        .sumOf { it.price ?: 0 }
+
+                    textCount.text = "Rp. $total"
+                }
             }
-
+        }
         btnPesan.setOnClickListener {
 
             val currentData =

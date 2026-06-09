@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         val imageViewLogout = view.findViewById<ImageView>(R.id.imageViewLogout)
         val imageViewProfile = view.findViewById<ImageView>(R.id.imageView)
         imageViewProfile.setImageResource(R.drawable.account)
