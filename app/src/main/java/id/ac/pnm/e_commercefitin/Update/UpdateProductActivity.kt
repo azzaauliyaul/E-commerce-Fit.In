@@ -56,11 +56,7 @@ class UpdateProductActivity : AppCompatActivity() {
             }
         }
         imageViewBack.setOnClickListener {
-            val intent = Intent(
-                this,
-                MainActivity::class.java
-            )
-            startActivity(intent)
+            finish()
         }
         btnUpload.setOnClickListener {
             val updatedPriceStr = editTextPrice.text.toString().trim()

@@ -73,6 +73,7 @@ class AddFragment : Fragment() {
             }
             if (imageUri == null) {
                 Toast.makeText(requireContext(), "Silakan pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
             val productPrice = productPriceStr.toIntOrNull()
             btnUploadProduct.isEnabled = false
@@ -102,6 +103,9 @@ class AddFragment : Fragment() {
                                     editTextCategory.text = ""
                                     editTextDescription.text = ""
                                     imageUri = null
+                                    Glide.with(this).clear(imagePreview)
+                                    imagePreview.setImageResource(R.drawable.upload)
+
                                     btnUploadProduct.isEnabled = true
                                 }
                                 .addOnFailureListener { e ->

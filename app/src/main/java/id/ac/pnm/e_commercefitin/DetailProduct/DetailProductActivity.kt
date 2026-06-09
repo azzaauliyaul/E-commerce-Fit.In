@@ -79,8 +79,6 @@ class DetailProductActivity : AppCompatActivity() {
             startActivity(intentChat)
         }
         btnAddCart.setOnClickListener {
-//            val newCart = ItemCart(img, judul, harga, kategori)
-//            CartFragment.dataCart.add(newCart)
             currentProduct?.let { product ->
 
                 lifecycleScope.launch(Dispatchers.IO) {
