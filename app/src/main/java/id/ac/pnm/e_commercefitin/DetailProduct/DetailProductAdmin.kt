@@ -12,6 +12,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.storage.storage
 import id.ac.pnm.e_commercefitin.Catalog.Catalog
@@ -20,6 +23,7 @@ import id.ac.pnm.e_commercefitin.R
 import id.ac.pnm.e_commercefitin.Update.UpdateProductActivity
 
 class DetailProductAdmin : AppCompatActivity() {
+    private var productListener: ValueEventListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,25 +45,34 @@ class DetailProductAdmin : AppCompatActivity() {
         val productId = intent.getStringExtra("productId")?:""
         var currentImageUrl = ""
         val database = Firebase.database
-        val product = database.getReference("product")
+        val product = database.getReference("product").child(productId)
 
-        product.child(productId).get().addOnSuccessListener { snapshot ->
-            if (snapshot.exists()){
-                val detailProduct = snapshot.getValue(Catalog::class.java)
-                detailProduct?.let {
-                    textViewDetailJudul.text = it.name
-                    textViewDeskripsi.text = it.deskripsi
-                    textViewDetailHarga.text = "Rp. ${it.price ?: 0}"
-                    textViewDetailkategori.text = it.category
-                    currentImageUrl = it.imageUrl
-                    Glide.with(this)
-                        .load(it.imageUrl)
-                        .placeholder(R.drawable.borderupload)
-                        .error(R.drawable.borderupload)
-                        .into(imageDetailProduct)
+        productListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val detailProduct = snapshot.getValue(Catalog::class.java)
+                    detailProduct?.let {
+                        textViewDetailJudul.text = it.name
+                        textViewDeskripsi.text = it.deskripsi
+                        textViewDetailHarga.text = "Rp. ${it.price ?: 0}"
+                        textViewDetailkategori.text = it.category
+                        currentImageUrl = it.imageUrl
+
+                        if (!isFinishing && !isDestroyed) {
+                            Glide.with(this@DetailProductAdmin)
+                                .load(it.imageUrl)
+                                .placeholder(R.drawable.borderupload)
+                                .error(R.drawable.borderupload)
+                                .into(imageDetailProduct)
+                        }
+                    }
                 }
             }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@DetailProductAdmin, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
         }
+        product.addValueEventListener(productListener!!)
         imageViewBack.setOnClickListener {
             val intent = Intent(
                 this,

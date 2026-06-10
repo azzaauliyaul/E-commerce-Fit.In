@@ -16,7 +16,7 @@
                 return INSTANCE ?: synchronized(this) {
                     val instance = Room.databaseBuilder(
                         applicationContext, AppDatabase::class.java, "cart"
-                    ).fallbackToDestructiveMigration().build()
+                    ).build()
                     INSTANCE = instance
                     instance
                 }
